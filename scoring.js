@@ -14,19 +14,18 @@ const seafoodPrices = {
   can: -100,
 };
 
-const resulttemplete = {
-  name: "", //海鮮丼の名前
-  size: "", //丼のサイズ
-  count: 0, //魚の数合計
-  baseScore: 0, //魚の値段合計
-  bonus: 0, //ボーナスで追加される値段
-  penalty: 0, //ペナルティで減産される値段
-  totalScore: 0,
-  comment: "",
-};
-
 function calculateScore(catches) {
-  const result = resulttemplete;
+  const result = {
+    name: "", //海鮮丼の名前
+    size: "", //丼のサイズ
+    count: 0, //魚の数合計
+    baseScore: 0, //魚の値段合計
+    bonus: 0, //ボーナスで追加される値段
+    bonusName: "", // ボーナス名
+    penalty: 0, //ペナルティで減産される値段
+    totalScore: 0,
+    comment: "",
+  };
   const big_size_basis = 20; //サイズ「大」「中」の境の値
   const litlle_size_basis = 10; //サイズ「中」「小」の境の値
 
@@ -40,14 +39,15 @@ function calculateScore(catches) {
   // size決定処理
   if (result.count >= big_size_basis) {
     result.size = "big";
-  } else if (fish_count >= litlle_size_basis) {
+  } else if (result.fish_count >= litlle_size_basis) {
     result.size = "middle";
   } else {
     result.size = "little";
   }
 
   // bonus加算処理
-
+  // name決定処理
+  // comment作成処理
   // totalScore計算
   result.totalScore = result.baseScore + result.bonus;
   console.log(result);
