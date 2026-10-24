@@ -27,8 +27,9 @@ async function navigate(page) {
     header.classList.toggle('title-header', page === 'title');
     playBgm(page);
     if (page === 'shop') playSe('enterShop');
+    if (page === 'result') playSe('result');
     const bind = (id, handler) => { const el = app.querySelector(`#${id}`); if (el) el.onclick = handler; };
-    const go = target => { playSe('select'); navigate(target); };
+    const go = target => { if (target !== 'result') playSe('select'); navigate(target); };
     bind('start', () => go('fishing'));
     bind('retry', () => go('fishing'));
     bind('title', () => go('title'));

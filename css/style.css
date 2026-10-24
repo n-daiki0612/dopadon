@@ -791,3 +791,14 @@ progress {
 .tool-icon .emoji {
   font-size: 30px;
 }
+/* タイトルロゴ */
+.title-logo {
+  margin: 0 0 8px;
+}
+.title-logo img {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  filter: drop-shadow(0 8px 10px #0b51642b);
+}
