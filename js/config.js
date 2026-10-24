@@ -139,23 +139,26 @@ export const UPGRADES = {
   },
 };
 // 上から最初の1件を採用。rate は基本点に追加する割合。
+// dishName はボーナス成立時に優先する丼名。未指定なら従来の命名を使う。
 export const BONUSES = [
-  { name: "しらす丼ボーナス", rate: 30, only: "shirasu" },
-  { name: "いくら丼ボーナス", rate: 100, only: "ikura" },
-  { name: "マグロ丼ボーナス", rate: 3, only: "maguro" },
+  { name: "しらす丼ボーナス", dishName: "しらす丼", rate: 30, only: "shirasu" },
+  { name: "いくら丼ボーナス", dishName: "いくら丼", rate: 100, only: "ikura" },
+  { name: "マグロ丼ボーナス", dishName: "マグロ丼", rate: 3, only: "maguro" },
   {
     name: "特上駿河湾ボーナス",
+    dishName: "特上駿河湾丼",
     rate: 2,
     kinds: 5,
     requires: { unagi: 1, kani: 1 },
   },
-  { name: "五色ボーナス", rate: 1, kinds: 5 },
+  { name: "五色ボーナス", dishName: "五色丼", rate: 1, kinds: 5 },
   {
     name: "静岡ダブルボーナス",
+    dishName: "静岡ダブル丼",
     rate: 1.2,
     requires: { shirasu: 2, sakuraebi: 2 },
   },
-  { name: "紅白ボーナス", rate: 0.5, requires: { tai: 1, ika: 1 } },
+  { name: "紅白ボーナス", dishName: "紅白丼", rate: 0.5, requires: { tai: 1, ika: 1 } },
 ];
 export const upgradePrice = (id, level) =>
   Math.round(UPGRADES[id].price * SETTINGS.priceGrowth ** level);
