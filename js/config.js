@@ -37,7 +37,7 @@ const item = (
 });
 const image = (id) => `./assets/${id === "can" ? "items" : "fish"}/${id}.png`;
 export const ITEMS = [
-  item("shirasu", "しらす", 50, 2, 18, [220, 320], "🐟", image("shirasu")),
+  item("shirasu", "しらす", 40, 2, 18, [220, 320], "🐟", image("shirasu")),
   item("sakuraebi", "桜エビ", 100, 2, 15, [260, 380], "🦐", image("sakuraebi")),
   item("unagi", "うなぎ", 500, 4, 6, [500, 620], "🐟", image("unagi")),
   item("ika", "イカ", 150, 2, 16, [220, 380], "🦑", image("ika")),
@@ -46,7 +46,7 @@ export const ITEMS = [
   item("maguro", "マグロ", 3000, 10, 4, [900, 1000], "🐟", image("maguro")),
   item("katsuo", "カツオ", 1500, 6, 6, [600, 800], "🐟"),
   item("tea", "お茶葉", 10, 1, 4, [90, 130], "🍵", "", "fun"),
-  item("ikura", "いくら", 120, 2, 4, [100, 150], "🔴", "", "fun"),
+  item("ikura", "いくら", 30, 2, 4, [200, 350], "🔴", "", "fun"),
   item("mikan", "みかん", 60, 1, 4, [100, 150], "🍊", "", "fun"),
   item("negitoro", "ネギトロ", 100, 2, 4, [110, 160], "🍣", "", "fun"),
   item("wasabi", "ワサビ", 30, 1, 4, [120, 170], "🌱", "", "fun"),
@@ -98,7 +98,7 @@ export const UPGRADES = {
   range: {
     name: "網ライセンス",
     description: "網の半径 +15px（銛は単体のまま）",
-    price: 1000,
+    price: 3000,
     step: 15,
     max: 8,
   },
@@ -110,7 +110,7 @@ export const UPGRADES = {
     max: 8,
   },
   time: {
-    name: "潜水時間増加",
+    name: "潜水ボンベ",
     description: "漁の時間 +5秒（ゲーム内の能力です）",
     price: 1000,
     step: 5,
@@ -140,8 +140,9 @@ export const UPGRADES = {
 };
 // 上から最初の1件を採用。rate は基本点に追加する割合。
 export const BONUSES = [
-  { name: "しらす丼ボーナス", rate: 0.8, only: "shirasu" },
-  { name: "いくら丼ボーナス", rate: 0.8, only: "ikura" },
+  { name: "しらす丼ボーナス", rate: 100, only: "shirasu" },
+  { name: "いくら丼ボーナス", rate: 100, only: "ikura" },
+  { name: "マグロ丼ボーナス", rate: 10, only: "maguro" },
   {
     name: "特上駿河湾ボーナス",
     rate: 2,
