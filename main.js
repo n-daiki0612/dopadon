@@ -1,97 +1,52 @@
-import { calculateScore } from "./scoring.js";
+﻿import { loadState, saveState, beginTrip, settleTrip } from './data/user_data.js';
+import { startFishing } from './fishing.js';
+import { renderResult, moneyText } from './result.js';
+import { renderShop, describeStats } from './shop/shop.js';
 
-const app = document.getElementById("app");
-
-// ゲーム全体の状態
-const gameState = {
-  money: 0,
-};
-
-// 直前のリザルト
-let lastResult = null;
-
-// 強化画面から戻る先
-let shopReturn = "title";
-
-// HTMLファイルを読み込む
-async function loadPage(page) {
-  const response = await fetch(`./pages/${page}.html`);
-
-  if (!response.ok) {
-    throw new Error(`${page}.html の読み込みに失敗しました`);
-  }
-
-  app.innerHTML = await response.text();
+const app = document.getElementById('app');
+const state = loadState();
+let cleanup = () => {}, navigating = false, shopReturn = 'title';
+function persist() {
+  document.getElementById('wallet').textContent = moneyText(state.money);
+  document.getElementById('save-notice').textContent = saveState(state) ? '' : '保存できないため、このページを閉じると進行状況が失われます。';
 }
-
-// タイトル画面
-async function showTitle() {
-  await loadPage("title");
-
-  document.getElementById("money").textContent = gameState.money;
-  document.getElementById("start").onclick = showFishing;
-  document.getElementById("shop").onclick = () => showShop("title");
+async function navigate(page) {
+  if (navigating) return;
+  navigating = true;
+  app.setAttribute('aria-busy', 'true');
+  try {
+    const response = await fetch(`./pages/${page}.html`);
+    if (!response.ok) throw new Error('画面の読み込みに失敗しました。');
+    const html = await response.text();
+    cleanup(); cleanup = () => {};
+    app.innerHTML = html; state.screen = page;
+    const bind = (id, handler) => { const el = app.querySelector(`#${id}`); if (el) el.onclick = handler; };
+    bind('start', () => navigate('fishing'));
+    bind('retry', () => navigate('fishing'));
+    bind('title', () => navigate('title'));
+    bind('shop', () => { shopReturn = page; navigate('shop'); });
+    bind('back', () => navigate(shopReturn === 'result' && state.lastResult ? 'result' : 'title'));
+    if (page === 'title') {
+      app.querySelector('#title-stats').textContent = `これまでの出漁 ${state.trips} 回 · ${describeStats(state)}`;
+      if (state.lastResult) { app.querySelector('#last-result').hidden = false; bind('last-result', () => navigate('result')); }
+    } else if (page === 'fishing') {
+      const trip = beginTrip(state);
+      if (!trip) throw new Error('漁はすでに進行中です。');
+      cleanup = startFishing(app, trip, state.currentCatch, catches => {
+        if (settleTrip(state, trip.id, catches)) { persist(); navigate('result'); }
+      });
+    } else if (page === 'result') {
+      if (!state.lastResult) throw new Error('まだ漁の結果がありません。');
+      renderResult(app, state.lastResult);
+    } else if (page === 'shop') renderShop(app, state, persist);
+    persist(); app.focus(); window.scrollTo(0, 0);
+  } catch (error) {
+    cleanup(); cleanup = () => {};
+    state.activeTrip = null;
+    app.innerHTML = '<section class="error"><h1>港への接続を確認してください</h1><p>ローカルHTTPサーバーから index.html を開いてください。画面ファイルの取得に失敗した場合も、ここから再試行できます。</p><p id="error-detail"></p><button id="recover" class="primary">タイトルへ再接続</button></section>';
+    app.querySelector('#error-detail').textContent = error.message;
+    app.querySelector('#recover').onclick = () => navigate('title');
+  } finally { navigating = false; app.removeAttribute('aria-busy'); }
 }
-
-// 漁画面
-async function showFishing() {
-  await loadPage("fishing");
-
-  // 仮の捕獲データ
-  const catches = {
-    shirasu: 30,
-    sakuraebi: 10,
-    maguro: 2,
-    can: 1,
-  };
-
-  // 将来的にはfishing.jsから捕獲データを受け取る
-  document.getElementById("finish").onclick = () => {
-    finishFishing(catches);
-  };
-}
-
-// 漁終了処理
-function finishFishing(catches) {
-  const result = calculateScore(catches);
-
-  gameState.money += result.totalScore;
-  lastResult = result;
-
-  showResult(result);
-}
-
-// リザルト画面
-async function showResult(result) {
-  await loadPage("result");
-
-  document.getElementById("result-name").textContent = result.name;
-  document.getElementById("result-size").textContent = result.size;
-  document.getElementById("result-score").textContent = result.totalScore;
-  document.getElementById("result-comment").textContent = result.comment;
-
-  document.getElementById("retry").onclick = showFishing;
-  document.getElementById("shop").onclick = () => showShop("result");
-  document.getElementById("title").onclick = showTitle;
-}
-
-// 強化画面
-async function showShop(returnTo = "title") {
-  shopReturn = returnTo;
-
-  await loadPage("shop");
-
-  document.getElementById("money").textContent = gameState.money;
-
-  // 将来的にはshop.jsを呼び出す
-  document.getElementById("back").onclick = () => {
-    if (shopReturn === "result" && lastResult) {
-      showResult(lastResult);
-    } else {
-      showTitle();
-    }
-  };
-}
-
-// ゲーム開始
-showTitle();
+window.addEventListener('pagehide', () => { cleanup(); persist(); });
+navigate('title');
