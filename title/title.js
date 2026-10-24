@@ -1,4 +1,4 @@
-import { player } from "../userdata/user_data.js";
+import { player } from "../data/user_data.js";
 
 export let user = null;
 
