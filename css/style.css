@@ -828,3 +828,44 @@ progress {
 #shukaku li > span:not(:first-child) {
   text-align: right;
 }
+/* タイトル画面の画像ボタン（出港・準備） */
+.title-actions {
+  align-items: flex-end;
+  gap: 20px;
+}
+.image-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 0;
+}
+.image-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 6px #0b51642b);
+  transition: filter 0.15s;
+}
+.image-button:hover img {
+  filter: drop-shadow(0 10px 10px #0b516440) brightness(1.05);
+}
+.start-button {
+  width: 260px;
+}
+.shop-button {
+  width: 170px;
+}
+@media (max-width: 760px) {
+  .start-button {
+    width: 58%;
+  }
+  .shop-button {
+    width: 36%;
+  }
+  .title-actions {
+    flex-wrap: nowrap;
+    gap: 6%;
+  }
+}
