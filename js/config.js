@@ -41,7 +41,7 @@ export const ITEMS = [
   item("sakuraebi", "桜エビ", 100, 2, 15, [260, 380], "🦐", image("sakuraebi")),
   item("unagi", "うなぎ", 500, 4, 6, [500, 620], "🐟", image("unagi")),
   item("ika", "イカ", 150, 2, 16, [220, 380], "🦑", image("ika")),
-  item("tai", "タイ", 35, 3, 10, [250, 310], "🐠", image("tai")),
+  item("tai", "タイ", 600, 5, 10, [400, 500], "🐠", image("tai")),
   item("kani", "カニ", 40, 15, 8, [90, 140], "🦀", image("kani")),
   item("maguro", "マグロ", 3000, 10, 4, [900, 1000], "🐟", image("maguro")),
   item("katsuo", "カツオ", 1500, 6, 6, [600, 800], "🐟"),
@@ -50,8 +50,8 @@ export const ITEMS = [
   item("mikan", "みかん", 60, 1, 4, [100, 150], "🍊", "", "fun"),
   item("negitoro", "ネギトロ", 100, 2, 4, [110, 160], "🍣", "", "fun"),
   item("wasabi", "ワサビ", 30, 1, 4, [120, 170], "🌱", "", "fun"),
-  item("can", "空き缶", -500, 1, 9, [100, 150], "🥫", image("can"), "trash"),
-  item("seaweed", "海藻", -250, 1, 7, [90, 140], "🌿", "", "trash"),
+  item("can", "空き缶", -1000, 1, 9, [100, 150], "🥫", image("can"), "trash"),
+  item("seaweed", "海藻", -500, 1, 7, [90, 140], "🌿", "", "trash"),
 ];
 export const ITEM_BY_ID = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
 export const TOOLS = {
@@ -140,9 +140,9 @@ export const UPGRADES = {
 };
 // 上から最初の1件を採用。rate は基本点に追加する割合。
 export const BONUSES = [
-  { name: "しらす丼ボーナス", rate: 100, only: "shirasu" },
+  { name: "しらす丼ボーナス", rate: 30, only: "shirasu" },
   { name: "いくら丼ボーナス", rate: 100, only: "ikura" },
-  { name: "マグロ丼ボーナス", rate: 10, only: "maguro" },
+  { name: "マグロ丼ボーナス", rate: 3, only: "maguro" },
   {
     name: "特上駿河湾ボーナス",
     rate: 2,
