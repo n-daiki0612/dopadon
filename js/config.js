@@ -72,7 +72,7 @@ export const TOOLS = {
     radius: 90,
     attack: 1,
     durability: 6,
-    miss: 0,
+    miss: 0.9,
   },
   bigNet: {
     name: "大きな網",
@@ -82,7 +82,16 @@ export const TOOLS = {
     radius: 155,
     attack: 2,
     durability: 5,
-    miss: 0.15,
+    miss: 0.85,
+  },
+  goldspear: {
+    name: "金の銛",
+    emoji: "金",
+    price: 100000,
+    radius: 0,
+    attack: 5,
+    durability: 1,
+    miss: 0,
   },
 };
 export const UPGRADES = {
