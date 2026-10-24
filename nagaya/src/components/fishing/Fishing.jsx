@@ -20,7 +20,6 @@ export default function Fishing({ navigate }) {
       <div className="ocean-top"><span>水揚げ日和 <i>☀</i></span><span>出現間隔 {(interval / 1000).toFixed(2)}s</span></div>
       <div className="sunbeam"/><div className="sunbeam second"/>
       {[0,1,2,3,4,5,6].map(i => <span key={i} className="bubble" style={{ left: `${10 + i * 13}%`, animationDelay: `${-i * 1.7}s` }}/ >)}
-      <div className="sea-label">SURUGA BAY <span>小さな漁から、大きな一杯へ。</span></div>
       {state.activeFish.map(fish => <button key={fish.id} className={`swimming-fish direction-${fish.direction}`} style={{ top: `${fish.top}%`, animationDuration: `${BALANCE.swimDuration}ms` }} aria-label={`${FISH[fish.species].name}を収穫`} onAnimationEnd={() => removeFish(fish.id)} onClick={() => { catchFish(fish.id); setNotice({ text: `${FISH[fish.species].name} +1`, id: fish.id }); }}><FishArt species={fish.species}/><span className="fish-name">{FISH[fish.species].name}</span></button>)}
       <div className="seabed"><span>〰</span><span>♧</span><span>〰</span><span>♧</span></div>
       <div className="catch-notice" role="status">{notice && <span key={notice.id}>✦ {notice.text}</span>}</div>
