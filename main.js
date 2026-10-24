@@ -7,35 +7,46 @@ const gameState = {
   money: 0,
 };
 
-// タイトル画面
-function showTitle() {
-  app.innerHTML = `
-    <h1>海の幸あつめて海鮮丼</h1>
-    <p>所持金：${gameState.money}円</p>
-    <button id="start">漁に出る</button>
-    <button id="shop">アップグレード</button>
-  `;
+// 直前のリザルト
+let lastResult = null;
 
-  document.getElementById("start").onclick = showFishing;
-  document.getElementById("shop").onclick = showShop;
+// 強化画面から戻る先
+let shopReturn = "title";
+
+// HTMLファイルを読み込む
+async function loadPage(page) {
+  const response = await fetch(`./pages/${page}.html`);
+
+  if (!response.ok) {
+    throw new Error(`${page}.html の読み込みに失敗しました`);
+  }
+
+  app.innerHTML = await response.text();
 }
 
-// 漁画面（仮）
-function showFishing() {
-  app.innerHTML = `
-    <h1>漁画面</h1>
-    <button id="finish">漁を終了</button>
-  `;
+// タイトル画面
+async function showTitle() {
+  await loadPage("title");
 
+  document.getElementById("money").textContent = gameState.money;
+  document.getElementById("start").onclick = showFishing;
+  document.getElementById("shop").onclick = () => showShop("title");
+}
+
+// 漁画面
+async function showFishing() {
+  await loadPage("fishing");
+
+  // 仮の捕獲データ
+  const catches = {
+    shirasu: 30,
+    sakuraebi: 10,
+    maguro: 2,
+    can: 1,
+  };
+
+  // 将来的にはfishing.jsから捕獲データを受け取る
   document.getElementById("finish").onclick = () => {
-    // 仮の捕獲データ
-    const catches = {
-      shirasu: 30, //個数
-      sakuraebi: 10,
-      maguro: 2,
-      can: 1,
-    };
-
     finishFishing(catches);
   };
 }
@@ -45,31 +56,42 @@ function finishFishing(catches) {
   const result = calculateScore(catches);
 
   gameState.money += result.totalScore;
+  lastResult = result;
 
   showResult(result);
 }
 
-// リザルト画面（仮）
-function showResult(result) {
-  app.innerHTML = `
-    <h1>リザルト</h1>
-    <p>${result.name}</p>
-    <p>獲得金額：${result.totalScore}円</p>
-    <button id="back">タイトルへ</button>
-  `;
+// リザルト画面
+async function showResult(result) {
+  await loadPage("result");
 
-  document.getElementById("back").onclick = showTitle;
+  document.getElementById("result-name").textContent = result.name;
+  document.getElementById("result-size").textContent = result.size;
+  document.getElementById("result-score").textContent = result.totalScore;
+  document.getElementById("result-comment").textContent = result.comment;
+
+  document.getElementById("retry").onclick = showFishing;
+  document.getElementById("shop").onclick = () => showShop("result");
+  document.getElementById("title").onclick = showTitle;
 }
 
-// アップグレード画面（仮）
-function showShop() {
-  app.innerHTML = `
-    <h1>アップグレード画面</h1>
-    <button id="back">タイトルへ</button>
-  `;
+// 強化画面
+async function showShop(returnTo = "title") {
+  shopReturn = returnTo;
 
-  document.getElementById("back").onclick = showTitle;
+  await loadPage("shop");
+
+  document.getElementById("money").textContent = gameState.money;
+
+  // 将来的にはshop.jsを呼び出す
+  document.getElementById("back").onclick = () => {
+    if (shopReturn === "result" && lastResult) {
+      showResult(lastResult);
+    } else {
+      showTitle();
+    }
+  };
 }
 
-// 起動
+// ゲーム開始
 showTitle();
