@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#258eae" />
+    <title>アイテム購入</title>
+    <link rel="stylesheet" href="shop.css" />
+    <script type = "module" src = "shop.js"></script>
+  </head>
+  <body>
+    <!-- 海辺の道具のイラスト。画像ファイルや外部サービスは使いません。 -->
+    <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="bamboo" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f6dc8c" /><stop offset="1" stop-color="#b08338" /></linearGradient>
+        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9ffff" /><stop offset="1" stop-color="#65cbdc" /></linearGradient>
+        <clipPath id="net-mesh"><path d="M65 48C56 77 84 117 111 93l20-49-66 4Z" /></clipPath>
+        <clipPath id="basket-mesh"><path d="m39 68 9 63h69l8-63H39Z" /></clipPath>
+        <symbol id="icon-fish" viewBox="0 0 24 24"><path d="M3 12c6-9 12-8 17 0-5 8-11 9-17 0Zm0 0v-6m0 6v6M13 6l-3-3m3 15-3 3" /><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none" /></symbol>
+        <symbol id="icon-hook" viewBox="0 0 24 24"><path d="M14 3v13a5 5 0 0 1-10 0v-4l4 3M11 3h6" /></symbol>
+        <symbol id="icon-shell" viewBox="0 0 24 24"><path d="M12 21 3 10a9 9 0 0 1 18 0l-9 11ZM12 20V3M12 20 7 5m5 15 5-15M9 21h6" /></symbol>
+        <symbol id="icon-mask" viewBox="0 0 24 24"><path d="M3 9h18v6c0 4-6 5-9 1-3 4-9 3-9-1V9Zm9 1v5M21 11V4h2M1 11h2" /></symbol>
+        <symbol id="icon-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="m12 7 4 5-4 5-4-5 4-5Z" /></symbol>
+        <symbol id="art-rod" viewBox="0 0 160 160">
+          <ellipse cx="80" cy="141" rx="48" ry="6" fill="#17485c" opacity=".15" />
+          <g stroke="#385346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M104 22Q144 13 137 69" fill="none" stroke="#e6f6ed" stroke-width="2" />
+            <path d="m34 137 70-115" stroke="#76522b" stroke-width="9" />
+            <path d="m35 133 68-110" stroke="url(#bamboo)" stroke-width="6" />
+            <path d="m44 116 7 4m8-29 7 4m8-29 6 3m9-29 6 3" stroke="#947036" stroke-width="3" />
+            <path d="m32 138 16-27" stroke="#c56f3d" stroke-width="11" />
+            <path d="m33 135 12-19" stroke="#e7ad67" stroke-width="3" />
+            <circle cx="64" cy="101" r="12" fill="#efaa50" stroke="#76522b" /><circle cx="64" cy="101" r="5" fill="#547f83" />
+            <path d="m73 104 7 5-4 5" fill="none" stroke="#76522b" />
+            <path d="M137 80v15q0 11-9 8-6-2-3-9l3 3" fill="none" stroke="#d5f2ef" />
+            <path d="M132 66c0-8 10-8 10 0v13h-10V66Z" fill="#fff0cd" stroke="#456b74" stroke-width="2" />
+            <path d="M132 66c0-8 10-8 10 0v5h-10v-5Z" fill="#ec7951" stroke="none" />
+          </g>
+        </symbol>
+        <symbol id="art-net" viewBox="0 0 160 160">
+          <ellipse cx="80" cy="141" rx="45" ry="6" fill="#17485c" opacity=".15" />
+          <path d="m32 136 54-69" stroke="#76522b" stroke-width="11" stroke-linecap="round" /><path d="m32 133 51-65" stroke="#e4bd78" stroke-width="6" stroke-linecap="round" />
+          <path d="M65 48C56 77 84 117 111 93l20-49-66 4Z" fill="#c1eeee" fill-opacity=".55" stroke="#407e87" stroke-width="3" />
+          <g clip-path="url(#net-mesh)" fill="none" stroke="#e0ffff" stroke-width="1.8"><path d="m49 41 81 78M57 29l82 78M65 18l82 78M43 58l80 78M42 75l65 65M67 110l76-76M57 98l76-76M51 85l76-76M77 119l76-76" /></g>
+          <ellipse cx="99" cy="45" rx="35" ry="25" transform="rotate(-25 99 45)" fill="none" stroke="#2d5766" stroke-width="7" /><ellipse cx="99" cy="44" rx="34" ry="24" transform="rotate(-25 99 44)" fill="none" stroke="#e9ddad" stroke-width="3" />
+          <path d="m36 128 9 7" stroke="#a16d37" stroke-width="5" />
+        </symbol>
+        <symbol id="art-rake" viewBox="0 0 160 160">
+          <ellipse cx="83" cy="140" rx="54" ry="6" fill="#17485c" opacity=".15" />
+          <g stroke="#77543a" stroke-width="3" stroke-linejoin="round">
+            <path d="M89 78V61c0-32 42-32 42 0v17" fill="none" stroke="#e5e8cb" stroke-width="5" />
+            <path d="m83 77 9 56h39l9-56H83Z" fill="#ef9352" /><ellipse cx="111" cy="77" rx="28" ry="8" fill="#ffc079" />
+            <path d="m96 91 5 32m23-32-4 32" stroke="#fbc59a" /><path d="m86 85 51 0" stroke="#c36b3f" />
+            <path d="m31 131 31-81" stroke="#75532d" stroke-width="10" stroke-linecap="round" /><path d="m32 128 30-77" stroke="#e4be7e" stroke-width="5" stroke-linecap="round" />
+            <path d="m43 41 40 15-3 11-40-15 3-11Z" fill="#82a7af" stroke="#315b6a" /><path d="m42 43 5-14m5 17 5-14m5 18 5-14m5 18 5-14" fill="none" stroke="#315b6a" stroke-width="5" stroke-linecap="round" />
+          </g>
+          <path d="m47 133-9-10c-1-14 22-14 21 0l-12 10Z" fill="#f9dfb0" stroke="#b7996c" stroke-width="2" /><path d="m47 131-4-12m4 12 5-12" stroke="#c5a97d" stroke-width="1.5" />
+        </symbol>
+        <symbol id="art-mask" viewBox="0 0 160 160">
+          <ellipse cx="80" cy="141" rx="48" ry="6" fill="#17485c" opacity=".15" />
+          <path d="M30 88C5 79 12 44 35 46m93 42c25-9 18-44-5-42" fill="none" stroke="#2c7185" stroke-width="11" />
+          <path d="M129 103V35q0-17 14-17h4v13h-5v72" fill="#f2ae55" stroke="#76543c" stroke-width="3" stroke-linejoin="round" /><path d="M141 18h9v14h-9z" fill="#405c67" stroke="#284454" stroke-width="3" />
+          <path d="M23 57q0-10 10-10h94q10 0 10 10v37q0 16-18 16H96L80 94l-15 16H41q-18 0-18-16V57Z" fill="#f0ba58" stroke="#345b6b" stroke-width="4" stroke-linejoin="round" />
+          <path d="M34 60h38v28l-12 12H44q-10 0-10-10V60Zm54 0h38v30q0 10-10 10h-15L88 88V60Z" fill="url(#glass)" stroke="#417d8b" stroke-width="3" stroke-linejoin="round" /><path d="m41 79 13-13m-12 25 23-23m31 12 14-14m-14 27 23-23" stroke="#efffff" stroke-width="4" stroke-linecap="round" opacity=".8" />
+        </symbol>
+        <symbol id="art-fins" viewBox="0 0 160 160">
+          <ellipse cx="80" cy="141" rx="48" ry="6" fill="#17485c" opacity=".15" />
+          <g transform="rotate(12 80 80)" stroke="#365c68" stroke-width="3" stroke-linejoin="round">
+            <path d="M45 25q16-10 24 6l3 38 10 57q-29 18-55-1l10-57 2-30q0-9 6-13Z" fill="#f5ba58" /><path d="M45 39q11-9 17 2l2 27H42l3-29Z" fill="#8a704b" /><path d="m39 80-5 39m23-39 4 42m-12-43-2 46" fill="none" stroke="#cc8c3e" />
+            <path d="M97 19q16-10 24 6l3 38 10 57q-29 18-55-1l10-57 2-30q0-9 6-13Z" fill="#79cfce" /><path d="M97 33q11-9 17 2l2 27H94l3-29Z" fill="#3b727d" /><path d="m91 74-5 39m23-39 4 42m-12-43-2 46" fill="none" stroke="#449ba6" />
+          </g>
+        </symbol>
+        <symbol id="art-basket" viewBox="0 0 160 160">
+          <ellipse cx="80" cy="141" rx="49" ry="6" fill="#17485c" opacity=".15" />
+          <path d="M51 62V45c0-31 57-31 57 0v17" fill="none" stroke="#715231" stroke-width="10" /><path d="M51 62V45c0-31 57-31 57 0v17" fill="none" stroke="#e8c180" stroke-width="5" />
+          <path d="m39 68 9 63h69l8-63H39Z" fill="#d6a965" stroke="#795c36" stroke-width="3" stroke-linejoin="round" />
+          <g clip-path="url(#basket-mesh)" stroke="#af8248" stroke-width="2"><path d="M40 83h86M40 96h86M40 109h86M40 121h86M52 71v63m14-63v63m14-63v63m14-63v63m14-63v63" /></g>
+          <path d="m35 62 11-12h74l10 12v13H35V62Z" fill="#efd093" stroke="#795c36" stroke-width="3" stroke-linejoin="round" /><ellipse cx="83" cy="61" rx="22" ry="7" fill="#6b704f" stroke="#795c36" stroke-width="2" />
+          <path d="M76 53q12-24 27-6l10-9-2 23-11-7q-11 9-24-1Z" fill="#83c4d2" stroke="#356276" stroke-width="2.5" stroke-linejoin="round" /><circle cx="83" cy="48" r="2" fill="#264b60" />
+          <path d="M75 76h13v22H75z" fill="#b67f42" stroke="#795c36" stroke-width="2" /><rect x="77" y="83" width="9" height="10" rx="1" fill="#ebd68f" stroke="#795c36" stroke-width="2" />
+        </symbol>
+        <symbol id="art-fisher" viewBox="0 0 160 160">
+          <path d="M23 160v-30q2-27 38-35h38q36 8 38 35v30" fill="#d9e8de" stroke="#315a68" stroke-width="4" /><path d="m50 103 12 57h38l11-57-15-8H64l-14 8Z" fill="#3988a4" stroke="#315a68" stroke-width="3" />
+          <path d="M47 56h66v25q0 37-33 37T47 81V56Z" fill="#f1c28d" stroke="#805e44" stroke-width="3" /><path d="M40 53q0-37 40-37t40 37l-80 0Z" fill="#f2bd60" stroke="#765736" stroke-width="3" /><path d="M32 48h96l10 12H22l10-12Z" fill="#e0a34f" stroke="#765736" stroke-width="3" />
+          <path d="m65 36 15-10 15 10-15 9-15-9Z" fill="#4b91a5" stroke="#3d7080" stroke-width="2" /><path d="m60 75 9-2m22 0 9 2" stroke="#5c4938" stroke-width="3" stroke-linecap="round" /><circle cx="65" cy="82" r="3" fill="#4f483d" /><circle cx="95" cy="82" r="3" fill="#4f483d" />
+          <path d="M61 95q11-12 19-4 8-8 19 4-12 8-19 1-7 7-19-1Z" fill="#f1e9d5" stroke="#a78c67" stroke-width="1.5" /><path d="M73 105q7 5 14 0" fill="none" stroke="#aa7656" stroke-width="2.5" stroke-linecap="round" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="sea-scenery" aria-hidden="true">
+      <svg viewBox="0 0 1440 1000" preserveAspectRatio="none">
+        <circle cx="1230" cy="85" r="48" fill="#fff2ae" opacity=".8" />
+        <path d="M0 140q180-35 360 0t360 0 360 0 360 0v26q-180-35-360 0t-360 0-360 0-360 0Z" fill="#d8ffff" opacity=".45" />
+        <path d="M0 185q180-35 360 0t360 0 360 0 360 0" fill="none" stroke="#c6f8ff" stroke-width="4" opacity=".25" />
+        <g fill="none" stroke="#d0fcff" stroke-width="3" opacity=".35"><circle cx="65" cy="525" r="13" /><circle cx="89" cy="474" r="7" /><circle cx="56" cy="438" r="4" /><circle cx="1340" cy="675" r="17" /><circle cx="1319" cy="614" r="8" /><circle cx="1346" cy="577" r="5" /></g>
+        <g fill="#0a6589" opacity=".35"><path d="M25 707q35-33 63 0-28 33-63 0l-17 15v-30l17 15Z" /><path d="M1303 350q35-33 63 0-28 33-63 0l-17 15v-30l17 15Z" /><path d="M118 308q25-23 45 0-20 23-45 0l-12 10v-20l12 10Z" /></g>
+        <path d="M0 946q250-35 490 1t490-2 460 0v55H0Z" fill="#dac496" /><path d="M0 958q250-35 490 1t490-2 460 0" fill="none" stroke="#f4e0ae" stroke-width="5" />
+        <path d="M74 956q-30-53-15-95m23 95q26-76 10-114m-15 93q-6-39 14-59M1354 957q28-57 12-97m-22 97q-22-67-7-108" fill="none" stroke="#4c9d88" stroke-width="10" stroke-linecap="round" />
+        <path d="m1230 960 8-17 7 16 18 2-14 11 4 17-15-9-15 9 4-17-14-11 17-1Z" fill="#e6a268" /><path d="m174 980-15-15c-2-19 30-19 29 0l-14 15Z" fill="#fff0c8" stroke="#bcab83" stroke-width="2" />
+      </svg>
+    </div>
+
+    <!-- レイアウトのみ。商品選択・購入・もどるボタンの処理は未接続です。 -->
+    <main class="game-window" aria-labelledby="shop-title">
+      <header class="title-bar">
+        <h1 id="shop-title"><svg class="icon" aria-hidden="true"><use href="#icon-fish" /></svg>アイテム購入</h1>
+        <div class="wallet" aria-label="所持金 2480ゴールド"><span class="wallet-label">所持金</span><svg class="icon" aria-hidden="true"><use href="#icon-coin" /></svg><strong><b id = "money">2480</b><span>G</span></strong></div>
+      </header>
+
+      <div class="shop-content">
+        <section class="catalog" aria-label="海の幸をとる道具一覧">
+          <div class="category-tabs" role="group" aria-label="道具の種類">
+            <button class="category active" type="button" aria-pressed="true">すべて</button>
+            <button class="category" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-hook" /></svg>釣り</button>
+            <button class="category" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-shell" /></svg>磯あそび</button>
+            <button class="category" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-mask" /></svg>素もぐり</button>
+          </div>
+          <div class="item-grid">
+            <button class="item-slot selected" type="button" aria-pressed="true" aria-label="竹の釣りざお、480ゴールド、選択中"><span class="item-name">竹の釣りざお</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-rod" /></svg><span class="item-price">480 <small>G</small></span><span class="selection-arrow" aria-hidden="true">▶</span></button>
+            <button class="item-slot" type="button" aria-pressed="false" aria-label="丸いたも網、360ゴールド"><span class="item-name">丸いたも網</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-net" /></svg><span class="item-price">360 <small>G</small></span></button>
+            <button class="item-slot" type="button" aria-pressed="false" aria-label="潮干狩りセット、1200ゴールド"><span class="item-name">潮干狩りセット</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-rake" /></svg><span class="item-price">1,200 <small>G</small></span></button>
+            <button class="item-slot" type="button" aria-pressed="false" aria-label="潜水マスク、960ゴールド"><span class="item-name">潜水マスク</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-mask" /></svg><span class="item-price">960 <small>G</small></span></button>
+            <button class="item-slot" type="button" aria-pressed="false" aria-label="足ひれ、680ゴールド"><span class="item-name">足ひれ</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-fins" /></svg><span class="item-price">680 <small>G</small></span></button>
+            <button class="item-slot" type="button" aria-pressed="false" aria-label="魚かご、820ゴールド"><span class="item-name">魚かご</span><svg class="item-picture" viewBox="0 0 160 160" aria-hidden="true"><use href="#art-basket" /></svg><span class="item-price">820 <small>G</small></span></button>
+          </div>
+          <div class="catalog-footer"><span>全 6 種類</span><span class="page-number"><span aria-hidden="true">◀</span> 1 / 1 <span aria-hidden="true">▶</span></span></div>
+        </section>
+
+        <aside class="item-detail" aria-labelledby="detail-title">
+          <h2 id="detail-title">竹の釣りざお</h2>
+          <div class="preview-stage"><span class="type-label">釣り道具</span><svg viewBox="0 0 160 160" aria-hidden="true"><use href="#art-rod" /></svg></div>
+          <p class="item-description">軽くてしなやかな竹のさお。<br />堤防で小さな魚をねらおう。</p>
+          <dl class="item-stats"><div><dt>つかまえやすさ</dt><dd class="stat-bonus">＋8</dd></div><div><dt>とれる海の幸</dt><dd>アジ・サバ</dd></div></dl>
+          <div class="stat-preview"><span>装備後のつかまえやすさ</span><strong>12 <span aria-hidden="true">→</span> <span class="stat-bonus">20</span></strong></div>
+          <div class="purchase-price"><span>価格</span><strong>480 <small>G</small></strong></div>
+          <button class="buy-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-coin" /></svg>購入する</button>
+          <p class="owned-count">所持数：0 個</p>
+        </aside>
+      </div>
+
+      <footer class="bottom-bar">
+        <div class="message-box"><span class="merchant-portrait"><svg viewBox="20 12 120 125" aria-hidden="true"><use href="#art-fisher" width="160" height="160" /></svg></span><div><span class="merchant-name">浜の道具屋さん</span><p>今日は何がとれるかね？<br class="mobile-break" /> 道具をそろえて海へ行こう！</p></div><span class="message-arrow" aria-hidden="true">▼</span></div>
+        <button class="back-button" type="button"><span aria-hidden="true">◀</span> もどる</button>
+      </footer>
+    </main>
+  </body>
+</html>

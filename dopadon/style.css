@@ -132,7 +132,7 @@ html, body {
 #sea {
   position: absolute;
   inset: 0;
-  cursor: url("images/net.png") 48 48, crosshair;
+  cursor: url("../assets/tools/net.png") 48 48, crosshair;
 }
 
 .item {

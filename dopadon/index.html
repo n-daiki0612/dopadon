@@ -12,9 +12,9 @@
 
       <!-- タイトル画面 -->
       <section id="screen-title" class="screen active">
-        <img class="bg" src="images/bg_sea.png" alt="" />
+        <img class="bg" src="../assets/backgrounds/bg_sea.png" alt="" />
         <div class="title-box">
-          <img id="title-logo" src="images/title_logo.png" alt="海の幸集めて海鮮丼" />
+          <img id="title-logo" src="../assets/ui/title_logo.png" alt="海の幸集めて海鮮丼" />
           <p class="lead">流れてくる海の幸をタップで集めて、<br />最高の海鮮丼を作ろう！</p>
           <button id="btn-start" class="btn">スタート</button>
           <button id="btn-howto" class="btn btn-sub">あそびかた</button>
@@ -37,7 +37,7 @@
 
       <!-- メインゲーム：集める -->
       <section id="screen-catch" class="screen">
-        <img class="bg" src="images/bg_sea.png" alt="" />
+        <img class="bg" src="../assets/backgrounds/bg_sea.png" alt="" />
         <div class="hud">
           <div>のこり <span id="hud-time">30</span> 秒</div>
           <div>とった数 <span id="hud-count">0</span></div>
@@ -49,11 +49,11 @@
 
       <!-- メインゲーム：盛り付け -->
       <section id="screen-build" class="screen">
-        <img class="bg" src="images/bg_kitchen.png" alt="" />
+        <img class="bg" src="../assets/backgrounds/bg_kitchen.png" alt="" />
         <h2 class="build-title">海鮮丼を盛り付けよう！ <small>（最大 <span id="build-max"></span> 個）</small></h2>
         <div class="build-area">
           <div class="bowl-wrap" id="build-bowl">
-            <img class="bowl" src="images/bowl.png" alt="丼" />
+            <img class="bowl" src="../assets/ui/bowl.png" alt="丼" />
             <div class="toppings"></div>
           </div>
           <div class="build-side">
@@ -67,12 +67,12 @@
 
       <!-- リザルト -->
       <section id="screen-result" class="screen">
-        <img class="bg" src="images/bg_kitchen.png" alt="" />
+        <img class="bg" src="../assets/backgrounds/bg_kitchen.png" alt="" />
         <div class="result-box">
           <h2 id="result-name">海鮮丼</h2>
           <p id="result-desc" class="desc"></p>
           <div class="bowl-wrap" id="result-bowl">
-            <img class="bowl" src="images/bowl.png" alt="丼" />
+            <img class="bowl" src="../assets/ui/bowl.png" alt="丼" />
             <div class="toppings"></div>
           </div>
           <table class="score-table">

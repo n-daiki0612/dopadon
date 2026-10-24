@@ -1,4 +1,4 @@
-﻿# dopadon
+# dopadon
 
 ## 海の幸あつめて海鮮丼
 
@@ -10,13 +10,13 @@ HTML / CSS / JavaScript（ES Modules）とブラウザ標準APIで動きます�
 Node.js 22.7以降（検証環境: 24.14.1）を使用します。
 
 ```powershell
-node serve.mjs
+node scripts/serve.mjs
 ```
 
 ブラウザで http://127.0.0.1:4173 を開いてください。停止はサーバーを実行したターミナルで Ctrl+C。
 `file://` でHTMLを直接開くと、ES Modules / fetch の制限で動きません。
 
-`serve.mjs` は開発用の静的ファイル配信だけを行います。ゲームの状態・計算はすべてブラウザ側です。
+`scripts/serve.mjs` は開発用の静的ファイル配信だけを行います。ゲームの状態・計算はすべてブラウザ側です。
 必要なファイルを明示した許可リストだけを配信し、ディレクトリ一覧・再帰走査・シンボリックリンクの参照は行いません。
 一般の静的ホスティングでも、下記の本体ファイルと画像を同じ相対配置で公開できます。
 
@@ -34,19 +34,19 @@ node serve.mjs
 
 ### ファイルと責任
 
-- `index.html` / `main.js`: 正式な入口、HTML取得、画面遷移、漁開始と終了の接続。
+- `index.html` / `js/main.js`: 正式な入口、HTML取得、画面遷移、漁開始と終了の接続。
 - `pages/title.html`, `pages/fishing.html`, `pages/result.html`, `pages/shop.html`: 4画面のHTML。
-- `style.css`: 全画面の共通デザイン。
-- `data/config.js`: 食材、道具、強化、価格、出現率、速度、HP、ボーナス、サイズ等の設定。
-- `data/user_data.js`: 唯一のプレイヤー状態、保存復元、出漁、売上確定、耐久消費。
-- `fishing.js`: 重み付き出現、DOM・requestAnimationFrameによる移動、単体/範囲攻撃、HP、捕獲、終了通知、停止処理。
-- `scoring.js`: 副作用のない採点・丼判定。入金しません。
-- `result.js`: 結果・内訳・自動盛り付けの表示。再表示で入金しません。
-- `shop/shop.js`: 強化購入、道具購入、装備、能力表示。
-- `dopadon/images/`: 既存の画像を再利用。素材のない食材は絵文字。
-- `game.test.mjs`: 採点・購入・状態・攻撃のNode標準テスト。
-- `browser.test.mjs`: 既存Chromium系ブラウザを使う独立プロファイルのE2Eテスト。
-- `serve.mjs`: 開発用静的サーバー。
+- `css/style.css`: 全画面の共通デザイン。
+- `js/config.js`: 食材、道具、強化、価格、出現率、速度、HP、ボーナス、サイズ等の設定。
+- `js/user_data.js`: 唯一のプレイヤー状態、保存復元、出漁、売上確定、耐久消費。
+- `js/fishing.js`: 重み付き出現、DOM・requestAnimationFrameによる移動、単体/範囲攻撃、HP、捕獲、終了通知、停止処理。
+- `js/scoring.js`: 副作用のない採点・丼判定。入金しません。
+- `js/result.js`: 結果・内訳・自動盛り付けの表示。再表示で入金しません。
+- `js/shop.js`: 強化購入、道具購入、装備、能力表示。
+- `assets/`: 既存の画像を再利用。素材のない食材は絵文字。
+- `tests/game.test.mjs`: 採点・購入・状態・攻撃のNode標準テスト。
+- `tests/browser.test.mjs`: 既存Chromium系ブラウザを使う独立プロファイルのE2Eテスト。
+- `scripts/serve.mjs`: 開発用静的サーバー。
 
 旧版の `dopadon/game.js`、旧画面のCSS等は参考資産として保持しています。正式なゲームはルートの `index.html` です。
 既存の重み付き抽選、左方向の移動、上下の揺れ、画像資産と採点関数の責任分離を再利用し、旧版の手動盛り付けは自動生成へ変更しました。
@@ -54,10 +54,10 @@ node serve.mjs
 
 ### 仮仕様・バランス
 
-調整値の正本は **`data/config.js`** です。
+調整値の正本は **`js/config.js`** です。
 
 - 初期所持金0G、銛、30秒。出漁は無料。
-- 価格は既存 `scoring.js` を優先（しらす50、桜エビ100、マグロ300、缶−100）。他の既存食材は旧ゲームの点数を採用。既存食材の出現重み・速度と出現間隔0.45〜0.9秒も踏襲。
+- 価格は既存 `js/scoring.js` を優先（しらす50、桜エビ100、マグロ300、缶−100）。他の既存食材は旧ゲームの点数を採用。既存食材の出現重み・速度と出現間隔0.45〜0.9秒も踏襲。
 - 16種類: 海の幸8、おふざけ食材6、ゴミ2。HP、追加食材の価格・重み・速度は仮設定。
 - 後半ほど出現間隔が短くなります。強化は次回出漁時の設定として固定します。
 - 銛は単体・基本攻撃力1・壊れません。範囲強化を買っても銛は単体です。
@@ -98,20 +98,110 @@ node serve.mjs
 ### 開発・検証
 
 ```powershell
-node --test game.test.mjs
+node --test tests/game.test.mjs
 ```
 
 ブラウザE2E（サーバーを起動した状態で、インストール済みのChromium系ブラウザを指定）:
 
 ```powershell
 $env:GAME_TEST_BROWSER='C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
-node browser.test.mjs
+node tests/browser.test.mjs
 ```
 
 E2EはOSの一時フォルダーに独立プロファイルとスクリーンショットを作成し、ユーザーの通常ブラウザの進行データは使いません。3回の漁で約2分かかります。最初の2周は通常の購入と強化を操作し、3周目のみ破損確認のため耐久1の大きな網をテスト保存データに設定します。
 
-3人で開発する場合は `main.js` の編集責任者を1人に固定し、漁担当は `fishing.js`、採点担当は `scoring.js` / `result.js`、強化担当は `shop/shop.js` / `data/user_data.js` を主に編集してください。共通設定の変更は食材ID・保存形式の互換性を合意して行います。
+3人で開発する場合は `js/main.js` の編集責任者を1人に固定し、漁担当は `js/fishing.js`、採点担当は `js/scoring.js` / `js/result.js`、強化担当は `js/shop.js` / `js/user_data.js` を主に編集してください。共通設定の変更は食材ID・保存形式の互換性を合意して行います。
 
 ### 今後の改善候補
 
 実プレイヤーによる価格・出現量・難易度調整、絵文字素材の画像化、音量切替付き効果音、モバイルでの細かな操作調整。市場イベント、ランキング、マルチプレイ等は今回の対象外です。
+
+### ディレクトリ整理（2026-10-24）
+
+今回の変更は配置と参照パスのみです。ゲームルール・価格・保存キー・HTMLの画面分割は変更していません。
+
+```text
+project/
+├── index.html
+├── README.md
+├── pages/                 # title / fishing / result / shop.html
+├── js/                    # main / scoring / fishing / result / shop / user_data / config.js
+├── css/
+│   └── style.css          # 現行の共通CSS（画面別CSSの新設はしていない）
+├── assets/
+│   ├── fish/              # shirasu, sakuraebi, unagi, ika, tai, kani.png
+│   ├── items/             # can, boot.png（bootは旧版用）
+│   ├── tools/             # net.png
+│   ├── backgrounds/       # bg_sea, bg_kitchen.png
+│   └── ui/                # bowl, title_logo.png
+├── scripts/
+│   └── serve.mjs
+├── tests/
+│   ├── game.test.mjs
+│   └── browser.test.mjs
+├── dopadon/               # 旧版HTML・JS・CSS等を保留（画像だけ共有assetsへ移動）
+├── title/                 # 旧タイトルHTML・JS・CSSを保留
+├── shop/                  # 旧ショップHTML・CSSを保留
+├── data/                  # 移動後の空ディレクトリを保留
+├── package-lock.json      # 既存ファイルを保持
+├── use                    # 用途未確定につき保持
+└── .backups/
+    └── layout-20261024-154607/  # 編集前の対象ファイルと移動対応表
+```
+
+`nagaya/` は上記の対象外です。配下の列挙・読取・変更・移動は行っていません。
+バックアップは対象を明示した42ファイルを元の配置でコピーし、全コピーのSHA-256一致を確認しています。`move-map.json` に移動対応を保存しました。Gitの一括操作・ステージング・コミットは行っていません。ファイル移動はワークスペース内の通常移動で、Gitへの反映時は内容の類似性からrenameとして検出できます。
+
+#### 移動対応表
+
+| 移動前 | 移動後 |
+|---|---|
+| `main.js` | `js/main.js` |
+| `scoring.js` | `js/scoring.js` |
+| `fishing.js` | `js/fishing.js` |
+| `result.js` | `js/result.js` |
+| `shop/shop.js` | `js/shop.js` |
+| `data/user_data.js` | `js/user_data.js` |
+| `data/config.js` | `js/config.js` |
+| `style.css` | `css/style.css` |
+| `game.test.mjs` | `tests/game.test.mjs` |
+| `browser.test.mjs` | `tests/browser.test.mjs` |
+| `serve.mjs` | `scripts/serve.mjs` |
+| `dopadon/images/{shirasu,sakuraebi,unagi,ika,tai,kani}.png` | `assets/fish/` の同名ファイル（6件） |
+| `dopadon/images/{boot,can}.png` | `assets/items/` の同名ファイル（2件） |
+| `dopadon/images/{bg_sea,bg_kitchen}.png` | `assets/backgrounds/` の同名ファイル（2件） |
+| `dopadon/images/{bowl,title_logo}.png` | `assets/ui/` の同名ファイル（2件） |
+| `dopadon/images/net.png` | `assets/tools/net.png` |
+
+#### パスの基準
+
+- `index.html` は `./js/main.js` と `./css/style.css` を読み込みます。
+- ES Modulesのimportはモジュールの位置基準。同じ `js/` 内では `./config.js` 等です。
+- `main.js` の `fetch('./pages/...')` は表示中のルート `index.html` 基準なので、変更していません。
+- `pages/` のHTMLは `index.html` 内へ挿入する断片です。画像は `./assets/...` とし、`pages/` 単体のURLで表示することは想定していません。
+- CSSの画像はCSS自身の場所基準なので `../assets/backgrounds/bg_sea.png` です。
+- 旧 `dopadon/index.html` / `game.js` / `style.css` の画像参照も `../assets/...` に変更し、素材移動による旧版の参照切れを防いでいます。
+- 旧 `shop/shop.html` のmodule参照、旧 `title/title.js` のデータimportも移動先へ変更しました。旧タイトルの既存エラー自体は変更していません。
+- 静的サーバーは自身の親ディレクトリを公開ルートにし、現行ゲームの新しいファイル配置のみ許可します。旧版・バックアップ・テストは、従来同様に配信対象外です。
+
+#### 保留した旧版・用途不明ファイル
+
+- `dopadon/index.html`, `dopadon/game.js`, `dopadon/style.css`: 旧単一HTMLゲーム。現行の入口からは未使用。手動盛り付け等の参考資産があるため保持。
+- `title/title.html`, `title/title.js`, `title/title.css`: 旧タイトル。HTML内の `./title/title.js` / `dopadon/index.html` / `int.html` は整理前から参照先が不整合。またJSが要求する `player` exportは現在の状態モジュールに存在しません。今回の対象は配置整理のため機能修正はしていません。
+- `shop/shop.html`, `shop/shop.css`: 旧固定表示ショップ。現行の `pages/shop.html` とは別のデザイン資産であり、単なる重複とは断定せず保持。
+- `dopadon/pushtest.html`: プッシュ確認用の文面。削除せず保持。
+- `dopadon/README.md`: 旧版の見出しのみ。削除せず保持。
+- `use`: 用途不明の既存ファイル。移動・削除せず保持。
+- `package-lock.json`: 空の依存情報を持つ既存ファイル。パッケージ構成を変えないため保持。
+- `data/`, `dopadon/images/`: 移動後に空になったディレクトリ。削除操作はしていません。
+
+今後は旧版を保管するか廃止するか合意した後に、旧ファイルをまとめて扱ってください。共通CSSの画面別分割は必要になった時点で行い、今回は空のCSSを新設していません。
+#### 整理後の検証結果
+
+- 整理前・整理後とも `node --test tests/game.test.mjs` 相当の既存10テストが成功（整理前はルートのテストファイル）。採点、購入可否、強化値、耐久度、入金一度限り、保存復元、攻撃判定を確認。
+- 現行7モジュール、旧版2モジュール、サーバー、テスト2ファイルの計12ファイルで `node --check` 成功。
+- 現行モジュールと単体テストの相対import 17件について参照先の存在を確認。
+- HTTP配信25リソース（入口、4画面、全現行JS、CSS、画像）で200応答、ファイル内容一致、Content-Typeを確認。
+- 移動画像13枚がバックアップとバイト単位で一致。旧版ゲームのHTML・動的画像・カーソル画像の参照先も保持。
+- バックアップ・対象外リソースが静的サーバーから配信されないことを確認。除外ディレクトリへのHTTP要求は行っていません。
+- 実ブラウザでのCSSの見た目、全画面遷移、漁からショップまでの一連操作は未検証です。整理前の作業でもブラウザの検証接続が切断されており、今回の移動による不具合とは判定していません。E2Eテストファイルはロジックを変更せず移動しています。

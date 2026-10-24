@@ -12,7 +12,7 @@ const CATCH_BONUS = 2;      // 1匹とるごとの漁獲ボーナス点
 const ITEM_SIZE = 96;
 const HIGHSCORE_KEY = 'kaisendon_highscore';
 
-// 海の幸とゴミ。画像は images/ の同名 PNG を差し替えればOK
+// 海の幸とゴミ。画像は ../assets/fish/ または ../assets/items/ の同名 PNG。
 const ITEMS = {
   shirasu:   { name: 'しらす', point: 20, weight: 18, speed: [110, 160] },
   sakuraebi: { name: '桜えび', point: 30, weight: 15, speed: [130, 190] },
@@ -25,7 +25,7 @@ const ITEMS = {
 };
 const FISH_KEYS = Object.keys(ITEMS).filter(k => !ITEMS[k].trash);
 
-const imgSrc = key => `images/${key}.png`;
+const imgSrc = key => `../assets/${['boot', 'can'].includes(key) ? 'items' : 'fish'}/${key}.png`;
 
 // 丼レシピ：上から順に判定し、最初に当てはまったものになる
 // c = 種類ごとの個数, n = 合計個数, kinds = 種類数
