@@ -12,6 +12,7 @@ const SE = {
   net: 'net.mp3',
   purchase: 'purchase.mp3',
   enterShop: 'shop-enter.mp3',
+  result: 'result.mp3',
 };
 const BGM_VOLUME = 0.35;
 const SE_VOLUME = 0.7;
