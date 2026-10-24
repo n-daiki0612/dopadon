@@ -1,4 +1,4 @@
-import { loadState, saveState, beginTrip, settleTrip } from './user_data.js';
+import { createState, loadState, saveState, beginTrip, settleTrip } from './user_data.js';
 import { startFishing } from './fishing.js';
 import { renderResult, moneyText } from './result.js';
 import { renderShop, describeStats } from './shop.js';
@@ -6,6 +6,8 @@ import { playBgm, playSe, isMuted, setMuted } from './sound.js';
 
 const app = document.getElementById('app');
 const state = loadState();
+const resetButton = document.getElementById('reset-data');
+const header = document.querySelector('.site-header');
 let cleanup = () => {}, navigating = false, shopReturn = 'title';
 function persist() {
   document.getElementById('wallet').textContent = moneyText(state.money);
@@ -21,6 +23,8 @@ async function navigate(page) {
     const html = await response.text();
     cleanup(); cleanup = () => {};
     app.innerHTML = html; state.screen = page;
+    resetButton.hidden = page !== 'title';
+    header.classList.toggle('title-header', page === 'title');
     playBgm(page);
     if (page === 'shop') playSe('enterShop');
     const bind = (id, handler) => { const el = app.querySelector(`#${id}`); if (el) el.onclick = handler; };
@@ -45,6 +49,8 @@ async function navigate(page) {
     } else if (page === 'shop') renderShop(app, state, persist);
     persist(); app.focus(); window.scrollTo(0, 0);
   } catch (error) {
+    resetButton.hidden = true;
+    header.classList.remove('title-header');
     cleanup(); cleanup = () => {};
     state.activeTrip = null;
     app.innerHTML = '<section class="error"><h1>港への接続を確認してください</h1><p>ローカルHTTPサーバーから index.html を開いてください。画面ファイルの取得に失敗した場合も、ここから再試行できます。</p><p id="error-detail"></p><button id="recover" class="primary">タイトルへ再接続</button></section>';
@@ -52,6 +58,14 @@ async function navigate(page) {
     app.querySelector('#recover').onclick = () => navigate('title');
   } finally { navigating = false; app.removeAttribute('aria-busy'); }
 }
+resetButton.onclick = () => {
+  if (navigating || state.screen !== 'title') return;
+  if (!confirm('セーブデータをリセットしますか？')) return;
+  Object.assign(state, createState());
+  shopReturn = 'title';
+  persist();
+  navigate('title');
+};
 const soundToggle = document.getElementById('sound-toggle');
 function showSoundState() {
   soundToggle.textContent = isMuted() ? '🔇' : '🔊';
