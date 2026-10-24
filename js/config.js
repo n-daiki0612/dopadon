@@ -23,7 +23,18 @@ const item = (
   emoji,
   image = "",
   kind = "seafood",
-) => ({ id, name, price, maxHp: hp, appearance, speed, emoji, image, kind });
+) => ({
+  id,
+  name,
+  price,
+  maxHp: hp,
+  appearance,
+  speed,
+  emoji,
+  // 画像の指定がなければ assets から自動で探す（魚は fish、それ以外は items）。
+  image: image || `./assets/${kind === "seafood" ? "fish" : "items"}/${id}.png`,
+  kind,
+});
 const image = (id) => `./assets/${id === "can" ? "items" : "fish"}/${id}.png`;
 export const ITEMS = [
   item("shirasu", "しらす", 50, 1, 18, [110, 160], "🐟", image("shirasu")),
@@ -57,6 +68,7 @@ export const TOOLS = {
   net: {
     name: "網",
     emoji: "🕸️",
+    image: "./assets/tools/net.png",
     price: 360,
     radius: 90,
     attack: 1,
@@ -66,6 +78,7 @@ export const TOOLS = {
   bigNet: {
     name: "大きな網",
     emoji: "🕸️",
+    image: "./assets/tools/net.png",
     price: 1200,
     radius: 155,
     attack: 2,
