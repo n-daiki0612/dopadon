@@ -187,6 +187,11 @@ h2 {
   top: 27%;
   filter: drop-shadow(0 20px 15px #0b51642b);
 }
+.title-page .hero-dish {
+  position: absolute;
+  inset: 0;
+  transform: translateY(-40px);
+}
 .hero-fish {
   position: absolute;
   width: 34%;
@@ -207,6 +212,24 @@ h2 {
   top: 40%;
   left: 13%;
   transform: rotate(-20deg);
+}
+.title-page .hero-fish.shrimp-extra {
+  width: 22%;
+}
+.title-page .shrimp-left {
+  top: 37%;
+  left: 23%;
+  transform: rotate(-30deg);
+}
+.title-page .shrimp-front {
+  top: 49%;
+  left: 39%;
+  transform: rotate(8deg);
+}
+.title-page .shrimp-right {
+  top: 49%;
+  left: 58%;
+  transform: rotate(35deg);
 }
 .round-label {
   position: absolute;
