@@ -1,5 +1,7 @@
 import { TOOLS, UPGRADES, upgradePrice, statsFor } from './config.js';
 import { moneyText } from './result.js';
+import { itemArt } from './fishing.js';
+import { playSe } from './sound.js';
 
 export function purchaseUpgrade(state, id) {
   if (!Object.hasOwn(UPGRADES, id) || state.activeTrip) return false;
@@ -30,12 +32,13 @@ export function renderShop(root, state, onChange) {
   }).join('');
   root.querySelector('#tools').innerHTML = Object.entries(TOOLS).map(([id, tool]) => {
     const owned = id === 'spear' || state.tools[id] > 0;
-    return `<article class="shop-card"><div class="card-top"><span class="tool-icon">${tool.emoji}</span><span class="tag">${id === state.equipment ? '装備中' : owned ? '所持中' : '未所持・破損'}</span></div><h3>${tool.name}</h3><p>${tool.radius ? `基本半径 ${tool.radius}px・基本攻撃力 ${tool.attack}` : 'クリックした1体に攻撃'}<br>${tool.durability ? `耐久 ${owned ? state.tools[id] : tool.durability} 回の漁` : '耐久無限'}${tool.miss ? '・15%ですっぽ抜け' : ''}</p><button data-${owned ? 'equip' : 'tool'}="${id}" ${id === state.equipment || (!owned && state.money < tool.price) ? 'disabled' : ''}>${owned ? id === state.equipment ? '装備中' : '装備する' : `${moneyText(tool.price)} で購入・装備`}</button></article>`;
+    return `<article class="shop-card"><div class="card-top"><span class="tool-icon">${itemArt(tool)}</span><span class="tag">${id === state.equipment ? '装備中' : owned ? '所持中' : '未所持・破損'}</span></div><h3>${tool.name}</h3><p>${tool.radius ? `基本半径 ${tool.radius}px・基本攻撃力 ${tool.attack}` : 'クリックした1体に攻撃'}<br>${tool.durability ? `耐久 ${owned ? state.tools[id] : tool.durability} 回の漁` : '耐久無限'}${tool.miss ? '・15%ですっぽ抜け' : ''}</p><button data-${owned ? 'equip' : 'tool'}="${id}" ${id === state.equipment || (!owned && state.money < tool.price) ? 'disabled' : ''}>${owned ? id === state.equipment ? '装備中' : '装備する' : `${moneyText(tool.price)} で購入・装備`}</button></article>`;
   }).join('');
   for (const button of root.querySelectorAll('[data-upgrade],[data-tool],[data-equip]')) {
     button.onclick = () => {
       const ok = button.dataset.upgrade ? purchaseUpgrade(state, button.dataset.upgrade)
         : button.dataset.tool ? purchaseTool(state, button.dataset.tool) : equipTool(state, button.dataset.equip);
+      if (ok) playSe(button.dataset.equip ? 'select' : 'purchase');
       root.querySelector('#shop-message').textContent = ok ? '更新しました！次の漁から効果が反映されます。' : '購入できません。所持金と所持状態を確認してください。';
       onChange(); renderShop(root, state, onChange);
     };

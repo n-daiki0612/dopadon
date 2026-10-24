@@ -9,7 +9,7 @@ export function renderResult(root, result) {
   root.querySelector('#settled-note').textContent = `第${result.trip}回の売上は反映済みです。${result.brokenTool ? ` ${TOOLS[result.brokenTool].name}が壊れたため、銛に戻しました。` : ''}`;
   const entries = ITEMS.filter(i => result.catches[i.id] > 0);
   root.querySelector('#catch-list').innerHTML = entries.length ? entries.map(i =>
-    `<li class="${i.kind === 'trash' ? 'bad' : ''}"><span>${i.emoji} ${i.name}</span><strong>× ${result.catches[i.id]}</strong></li>`).join('') : '<li>捕獲なし。次の漁に挑戦しよう！</li>';
+    `<li class="${i.kind === 'trash' ? 'bad' : ''}"><span class="mini-art">${itemArt(i)}${i.name}</span><strong>× ${result.catches[i.id]}</strong></li>`).join('') : '<li>捕獲なし。次の漁に挑戦しよう！</li>';
   const foods = entries.filter(i => i.kind !== 'trash');
   const bowl = root.querySelector('#toppings');
   const toppings = [];

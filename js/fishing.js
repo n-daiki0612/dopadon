@@ -1,4 +1,5 @@
 import { ITEMS, ITEM_BY_ID, SETTINGS, TOOLS } from './config.js';
+import { playSe } from './sound.js';
 
 export function pickWeighted(random = Math.random) {
   let n = random() * ITEMS.reduce((sum, item) => sum + item.appearance, 0);
@@ -17,7 +18,9 @@ export function hitItem(item, attack, miss, random = Math.random) {
   return 'hit';
 }
 export function itemArt(item) {
-  return item.image ? `<img src="${item.image}" alt="" draggable="false">` : `<span class="emoji" aria-hidden="true">${item.emoji}</span>`;
+  const emoji = `<span class="emoji" aria-hidden="true">${item.emoji}</span>`;
+  // 画像が読み込めないときだけ絵文字に切り替える。
+  return item.image ? `<img src="${item.image}" alt="" draggable="false" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${emoji}'>` : emoji;
 }
 
 // 既存 game.js の重み付き生成・左移動・正弦波の揺れを再利用。
@@ -61,6 +64,7 @@ export function startFishing(root, trip, catches, onFinish) {
   function attack(p, targetId) {
     if (stopped) return;
     aim(p);
+    playSe(stats.radius ? 'net' : 'harpoon');
     for (const item of targetsAt(items, p, stats.radius, targetId)) {
       const def = ITEM_BY_ID[item.id], outcome = hitItem(item, stats.attack, tool.miss);
       if (outcome === 'miss') { effect('すっぽ抜け！', item.x, item.y); continue; }
