@@ -42,10 +42,12 @@ export function renderResult(root, result) {
       foods.map(item =>{
         const count =result.catches[item.id];
         const subtotal = item.price * count;
-                return `<li>
-            ${item.name}：${moneyText(item.price)} * ${count}
-            = ${moneyText(subtotal)}
-        </li>`;
+        return `<li>
+        <span>${item.name}</span>
+        <span>${moneyText(item.price)}</span>
+        <span>${count}個</span>
+        <span>${moneyText(subtotal)}</span>
+        </li>`; 
     }).join("")
 
 
