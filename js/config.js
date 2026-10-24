@@ -4,7 +4,7 @@ export const SETTINGS = { duration: 30, attack: 1, spawnInterval: [0.45, 0.9], s
   priceGrowth: 1.65, saveKey: 'kaisendon_save_v1', maxCatchCount: 100000 };
 const item = (id, name, price, hp, appearance, speed, emoji, image = '', kind = 'seafood') =>
   ({ id, name, price, maxHp: hp, appearance, speed, emoji, image, kind });
-const image = id => `./assets/${id === 'can' ? 'items' : 'fish'}/${id}.png`;
+const image = (id, dir = id === 'can' ? 'items' : 'fish') => `./assets/${dir}/${id}.png`;
 export const ITEMS = [
   item('shirasu', 'しらす', 50, 1, 18, [110,160], '🐟', image('shirasu')),
   item('sakuraebi', '桜エビ', 100, 1, 15, [130,190], '🦐', image('sakuraebi')),
@@ -13,15 +13,15 @@ export const ITEMS = [
   item('tai', 'タイ', 35, 2, 10, [150,210], '🐠', image('tai')),
   item('kani', 'カニ', 40, 2, 8, [90,140], '🦀', image('kani')),
   item('maguro', 'マグロ', 300, 4, 4, [170,220], '🐟', image('maguro')),
-  item('katsuo', 'カツオ', 150, 3, 6, [160,210], '🐟'),
-  item('tea', 'お茶葉', 60, 1, 4, [90,130], '🍵', '', 'fun'),
-  item('ikura', 'いくら', 120, 2, 4, [100,150], '🔴', '', 'fun'),
-  item('mikan', 'みかん', 60, 1, 4, [100,150], '🍊', '', 'fun'),
-  item('negitoro', 'ネギトロ', 100, 2, 4, [110,160], '🍣', '', 'fun'),
-  item('wasabi', 'ワサビ', 80, 1, 4, [120,170], '🌱', '', 'fun'),
-  item('unagipie', 'うなぎパイ', 100, 1, 3, [130,180], '🥧', '', 'fun'),
+  item('katsuo', 'カツオ', 150, 3, 6, [160,210], '🐟', image('katsuo')),
+  item('tea', 'お茶葉', 60, 1, 4, [90,130], '🍵', image('tea', 'items'), 'fun'),
+  item('ikura', 'いくら', 120, 2, 4, [100,150], '🔴', image('ikura', 'items'), 'fun'),
+  item('mikan', 'みかん', 60, 1, 4, [100,150], '🍊', image('mikan', 'items'), 'fun'),
+  item('negitoro', 'ネギトロ', 100, 2, 4, [110,160], '🍣', image('negitoro', 'items'), 'fun'),
+  item('wasabi', 'ワサビ', 80, 1, 4, [120,170], '🌱', image('wasabi', 'items'), 'fun'),
+  item('unagipie', 'うなぎパイ', 100, 1, 3, [130,180], '🥧', image('unagipie', 'items'), 'fun'),
   item('can', '空き缶', -100, 1, 9, [100,150], '🥫', image('can'), 'trash'),
-  item('seaweed', '海藻', -50, 1, 7, [90,140], '🌿', '', 'trash'),
+  item('seaweed', '海藻', -50, 1, 7, [90,140], '🌿', image('seaweed', 'items'), 'trash'),
 ];
 export const ITEM_BY_ID = Object.fromEntries(ITEMS.map(i => [i.id, i]));
 export const TOOLS = {
