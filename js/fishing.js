@@ -1,4 +1,5 @@
 import { ITEMS, ITEM_BY_ID, SETTINGS, TOOLS } from './config.js';
+import { playSe } from './sound.js';
 
 export function pickWeighted(random = Math.random) {
   let n = random() * ITEMS.reduce((sum, item) => sum + item.appearance, 0);
@@ -61,6 +62,7 @@ export function startFishing(root, trip, catches, onFinish) {
   function attack(p, targetId) {
     if (stopped) return;
     aim(p);
+    playSe(stats.radius ? 'net' : 'harpoon');
     for (const item of targetsAt(items, p, stats.radius, targetId)) {
       const def = ITEM_BY_ID[item.id], outcome = hitItem(item, stats.attack, tool.miss);
       if (outcome === 'miss') { effect('すっぽ抜け！', item.x, item.y); continue; }

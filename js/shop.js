@@ -1,5 +1,6 @@
 import { TOOLS, UPGRADES, upgradePrice, statsFor } from './config.js';
 import { moneyText } from './result.js';
+import { playSe } from './sound.js';
 
 export function purchaseUpgrade(state, id) {
   if (!Object.hasOwn(UPGRADES, id) || state.activeTrip) return false;
@@ -36,6 +37,7 @@ export function renderShop(root, state, onChange) {
     button.onclick = () => {
       const ok = button.dataset.upgrade ? purchaseUpgrade(state, button.dataset.upgrade)
         : button.dataset.tool ? purchaseTool(state, button.dataset.tool) : equipTool(state, button.dataset.equip);
+      if (ok) playSe(button.dataset.equip ? 'select' : 'purchase');
       root.querySelector('#shop-message').textContent = ok ? '更新しました！次の漁から効果が反映されます。' : '購入できません。所持金と所持状態を確認してください。';
       onChange(); renderShop(root, state, onChange);
     };

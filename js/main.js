@@ -2,6 +2,7 @@ import { loadState, saveState, beginTrip, settleTrip } from './user_data.js';
 import { startFishing } from './fishing.js';
 import { renderResult, moneyText } from './result.js';
 import { renderShop, describeStats } from './shop.js';
+import { playBgm, playSe, isMuted, setMuted } from './sound.js';
 
 const app = document.getElementById('app');
 const state = loadState();
@@ -20,15 +21,18 @@ async function navigate(page) {
     const html = await response.text();
     cleanup(); cleanup = () => {};
     app.innerHTML = html; state.screen = page;
+    playBgm(page);
+    if (page === 'shop') playSe('enterShop');
     const bind = (id, handler) => { const el = app.querySelector(`#${id}`); if (el) el.onclick = handler; };
-    bind('start', () => navigate('fishing'));
-    bind('retry', () => navigate('fishing'));
-    bind('title', () => navigate('title'));
+    const go = target => { playSe('select'); navigate(target); };
+    bind('start', () => go('fishing'));
+    bind('retry', () => go('fishing'));
+    bind('title', () => go('title'));
     bind('shop', () => { shopReturn = page; navigate('shop'); });
-    bind('back', () => navigate(shopReturn === 'result' && state.lastResult ? 'result' : 'title'));
+    bind('back', () => go(shopReturn === 'result' && state.lastResult ? 'result' : 'title'));
     if (page === 'title') {
       app.querySelector('#title-stats').textContent = `これまでの出漁 ${state.trips} 回 · ${describeStats(state)}`;
-      if (state.lastResult) { app.querySelector('#last-result').hidden = false; bind('last-result', () => navigate('result')); }
+      if (state.lastResult) { app.querySelector('#last-result').hidden = false; bind('last-result', () => go('result')); }
     } else if (page === 'fishing') {
       const trip = beginTrip(state);
       if (!trip) throw new Error('漁はすでに進行中です。');
@@ -48,5 +52,13 @@ async function navigate(page) {
     app.querySelector('#recover').onclick = () => navigate('title');
   } finally { navigating = false; app.removeAttribute('aria-busy'); }
 }
+const soundToggle = document.getElementById('sound-toggle');
+function showSoundState() {
+  soundToggle.textContent = isMuted() ? '🔇' : '🔊';
+  soundToggle.setAttribute('aria-label', isMuted() ? 'サウンドをオンにする' : 'サウンドをオフにする');
+  soundToggle.setAttribute('aria-pressed', String(!isMuted()));
+}
+soundToggle.onclick = () => { setMuted(!isMuted()); showSoundState(); };
+showSoundState();
 window.addEventListener('pagehide', () => { cleanup(); persist(); });
 navigate('title');
