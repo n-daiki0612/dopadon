@@ -14,7 +14,7 @@ const seafoodPrices = {
   can: -100,
 };
 
-function calculateScore(catches) {
+export function calculateScore(catches) {
   const result = {
     name: "", //海鮮丼の名前
     size: "", //丼のサイズ
@@ -51,6 +51,7 @@ function calculateScore(catches) {
   // totalScore計算
   result.totalScore = result.baseScore + result.bonus;
   console.log(result);
+  return result;
 }
 
 calculateScore(catches);
