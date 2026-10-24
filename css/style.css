@@ -791,3 +791,29 @@ progress {
 .tool-icon .emoji {
   font-size: 30px;
 }
+
+#shukaku {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+/* 収穫物の表示幅をいっぱいにする */
+.score-list > div:first-child > dd {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+}
+
+/* 魚名・単価・個数・合計の4列 */
+#shukaku li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px 0;
+}
+
+/* 数値は各列の右端にそろえる */
+#shukaku li > span:not(:first-child) {
+  text-align: right;
+}
