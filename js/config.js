@@ -49,12 +49,7 @@ export const ITEMS = [
   item("ikura", "いくら", 120, 2, 4, [100, 150], "🔴", "", "fun"),
   item("mikan", "みかん", 60, 1, 4, [100, 150], "🍊", "", "fun"),
   item("negitoro", "ネギトロ", 100, 2, 4, [110, 160], "🍣", "", "fun"),
-<<<<<<< Updated upstream
   item("wasabi", "ワサビ", 80, 1, 4, [120, 170], "🌱", "", "fun"),
-=======
-  item("wasabi", "ワサビ", 80, 1, 4, [120, 170], "🥒", "", "fun"),
-  item("unagipie", "うなぎパイ", 100, 1, 3, [130, 180], "🥧", "", "fun"),
->>>>>>> Stashed changes
   item("can", "空き缶", -100, 1, 9, [100, 150], "🥫", image("can"), "trash"),
   item("seaweed", "海藻", -50, 1, 7, [90, 140], "🌿", "", "trash"),
 ];
