@@ -828,7 +828,7 @@ progress {
 #shukaku li > span:not(:first-child) {
   text-align: right;
 }
-/* タイトル画面の画像ボタン（出港・準備） */
+/* 画像ボタン（出港・準備）：タイトル・リザルト・アップグレード画面 */
 .title-actions {
   align-items: flex-end;
   gap: 20px;
@@ -859,13 +859,15 @@ progress {
 }
 @media (max-width: 760px) {
   .start-button {
-    width: 58%;
+    width: 57%;
   }
   .shop-button {
     width: 36%;
   }
   .title-actions {
-    flex-wrap: nowrap;
-    gap: 6%;
+    gap: 12px 6%;
+  }
+  .title-actions .text-button {
+    flex-basis: 100%;
   }
 }
