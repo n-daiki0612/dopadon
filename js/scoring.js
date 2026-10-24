@@ -25,7 +25,11 @@ export function calculateScore(catches, { penaltyReduction = 0 } = {}) {
     (!rule.only || (foods.length === 1 && foods[0].id === rule.only)) &&
     (!rule.kinds || foods.length >= rule.kinds) &&
     Object.entries(rule.requires || {}).every(([id, n]) => counts[id] >= n)) : null;
-  if (bonus) { result.bonusName = bonus.name; result.bonus = Math.round(result.baseScore * bonus.rate); }
+  if (bonus) {
+    result.bonusName = bonus.name;
+    result.bonus = Math.round(result.baseScore * bonus.rate);
+    if (bonus.dishName) result.name = bonus.dishName;
+  }
   const reduction = Number.isFinite(penaltyReduction) ? Math.max(0, Math.min(1, penaltyReduction)) : 0;
   result.penalty = Math.round(result.penalty * (1 - reduction));
   result.totalScore = result.baseScore + result.bonus - result.penalty;

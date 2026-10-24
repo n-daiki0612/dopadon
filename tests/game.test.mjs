@@ -21,10 +21,31 @@ test('penalties multiply quantities and do not enter food count', () => {
 });
 test('size boundaries and deterministic naming independent of size', () => {
   for (const [n, size] of [[0,'並盛'],[9,'並盛'],[10,'中盛'],[19,'中盛'],[20,'大盛']]) assert.equal(calculateScore({ ika: n }).size, size);
-  assert.equal(calculateScore({ shirasu: 29 }).name, '海鮮丼');
+  assert.equal(calculateScore({ shirasu: 29 }).name, 'しらす丼');
   assert.equal(calculateScore({ shirasu: 30, maguro: 30 }).name, 'しらす丼');
   assert.equal(calculateScore({ maguro: 31, shirasu: 30 }).name, 'マグロ丼');
 });
+test('bonus dish names take priority while non-bonus naming is preserved', () => {
+  const cases = [
+    [{ shirasu: 1 }, 'しらす丼ボーナス', 'しらす丼'],
+    [{ ikura: 1 }, 'いくら丼ボーナス', 'いくら丼'],
+    [{ maguro: 1 }, 'マグロ丼ボーナス', 'マグロ丼'],
+    [{ shirasu: 1, sakuraebi: 1, unagi: 1, kani: 1, tai: 1 }, '特上駿河湾ボーナス', '特上駿河湾丼'],
+    [{ shirasu: 1, sakuraebi: 1, ika: 1, tai: 1, tea: 1 }, '五色ボーナス', '五色丼'],
+    [{ shirasu: 30, sakuraebi: 2 }, '静岡ダブルボーナス', '静岡ダブル丼'],
+    [{ tai: 30, ika: 1 }, '紅白ボーナス', '紅白丼'],
+    [{}, 'ボーナスなし', '海鮮丼'],
+    [{ can: 2 }, 'ボーナスなし', '海鮮丼'],
+    [{ ika: 29 }, 'ボーナスなし', '海鮮丼'],
+    [{ ika: 30 }, 'ボーナスなし', 'イカ丼'],
+  ];
+  for (const [catches, bonusName, name] of cases) {
+    const result = calculateScore(catches);
+    assert.equal(result.name, name);
+    assert.equal(result.bonusName, bonusName);
+  }
+});
+
 test('bonus rules are pure, food-only and select one priority', () => {
   const c = { ikura: 2, can: 1 }; const a = calculateScore(c), b = calculateScore(c);
   assert.deepEqual(a, b); assert.deepEqual(c, { ikura: 2, can: 1 });
